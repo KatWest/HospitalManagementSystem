@@ -96,6 +96,18 @@ namespace HospitalManagementSystem
 
                 currForm.setupFormForUser(_currUser);
             }
+            else if (childForm.GetType() == typeof(PatientManagementForm))
+            {
+                PatientManagementForm currForm = (PatientManagementForm)childForm;
+
+                currForm.setupForm();
+            }
+            else if (childForm.GetType() == typeof(InventoryManagmentForm))
+            {
+                InventoryManagmentForm currForm = (InventoryManagmentForm)childForm;
+
+                currForm.setupForm();
+            }
         }
 
         private void sidebar_MouseClick(object sender, MouseEventArgs e)
