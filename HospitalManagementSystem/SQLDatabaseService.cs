@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -110,7 +111,6 @@ namespace HospitalManagementSystem
 
             return stockItems;
         }
-
         public List<StockItem> GetMedicationStock()
         {
             List<StockItem> medicationStock = new List<StockItem>();
@@ -133,6 +133,42 @@ namespace HospitalManagementSystem
             }
 
             return medicationStock;
+        }
+        public void UpdateStock(StockItem item)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(patientDbConnectionString))
+            {
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand("UPDATE stock SET" +
+                    "ItemName=@ItemName," +
+                    "StockCount=@StockCount," +
+                    "ItemType=@ItemType" +
+                    "WHERE Id=@ID");
+                command.Parameters.AddWithValue("@ItemName", item.ItemName);
+                command.Parameters.AddWithValue("@StockCount", item.StockCount);
+                command.Parameters.AddWithValue("@ItemType", item.ItemType);
+                command.Parameters.AddWithValue("@ID", item.Id);
+
+                command.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
+        }
+        public void AddStock(StockItem item)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(patientDbConnectionString))
+            {
+                sqlConnection.Open();
+                SqlCommand command = new SqlCommand("INSERT INTO stock(ItemName,StockCount,ItemType) VALUES(" +
+                    "@ItemName," +
+                    "@StockCount," +
+                    "@ItemType)");
+                command.Parameters.AddWithValue("@ItemName", item.ItemName);
+                command.Parameters.AddWithValue("@StockCount", item.StockCount);
+                command.Parameters.AddWithValue("@ItemType", item.ItemType);
+
+                command.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
         }
     }
 
